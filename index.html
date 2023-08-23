@@ -7,12 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/e1fe5e848b.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/style.css">
-    <title>Meme Generator</title>
+    <title>Ultimate Meme Generator</title>
 </head>
 
 <body onload="onInit()">
     <header>
-        <h1>Mister Canvas</h1>
+        <h1>Ultimate Meme Generator</h1>
     </header>
 
     <!-- <div>
@@ -21,32 +21,51 @@
     </div> -->
 
     <section class="meme-container">
-        <section class="meme-edit-options grid-item">
+        <div class="meme-display">
+            <canvas width="400" height="400"></canvas>
+        </div>
 
-            <h4>Text Color:</h4>
-            <input type="color" id="userColor" value="#000000" onchange="onSetColor(this.value)">
+        <section class="meme-edit-options">
+            <div class="main-grid">
+                <input type="text" id="userText" name="userText" placeholder="Insert Text" class="text-input">
+                <button onclick="onAddText()" class="one-col"><i class="fa-regular fa-square-plus"></i></button>
+                <button class="one-col"><i class="fa-solid fa-arrows-up-down"></i></button>
+                <button class="one-col"><i class="fa-solid fa-clock-rotate-left"></i></button>
+                <button onclick="onResetMeme()" class="one-col"><i class="fa-solid fa-trash-can"></i></button>
 
-            <button onclick="onAddText()">Add Text</button>
+                <button>💀</button>
+                <button>😂</button>
+                <button>😱</button>
+                <button>😭</button>
 
-            <button class="fontUp" onclick="onChangeFontSize('+')">&#x1f5da;</button>
-            <button class="fontDown" onclick="onChangeFontSize('-')">&#x1f5db;</button>
+                <div class="sub-grid">
+                    <select class="two-col" id="fontSelect" onchange="onFontChange(this.value)">
+                        <option value="Arial">Arial</option>
+                        <option value="Verdana">Verdana</option>
+                        <option value="Helvetica">Helvetica</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                        <option value="Courier New">Courier New</option>
+                    </select>
+                    <input type="color" id="userColor" value="#000000" onchange="onSetColor(this.value)">
 
-            <button><i class="fa-solid fa-align-left"></i></button>
-            <button><i class="fa-solid fa-align-justify"></i></button>
-            <button><i class="fa-solid fa-align-right"></i></button>
+                    <button><i class="fa-solid fa-bold"></i></button>
+                    <button onclick="onChangeFontSize('+')">&#x1f5da;</button>
+                    <button onclick="onChangeFontSize('-')">&#x1f5db;</button>
 
-            <button>Go a Step Back</button>
-            <button onclick="onResetMeme()">Reset</button>
+                    <button><i class="fa-solid fa-align-left"></i></button>
+                    <button><i class="fa-solid fa-align-justify"></i></button>
+                    <button><i class="fa-solid fa-align-right"></i></button>
+                </div>
 
+                <button class="two-col download-btn" onclick="downloadMeme()">Download <i
+                        class="fa-solid fa-arrow-down"></i></button>
+                <button class="two-col">Share <i class="fa-solid fa-share-from-square"></i></button>
+            </div>
         </section>
-        <canvas width="500" height="500">
-        </canvas>
     </section>
 
     <h2>Image Gallery</h2>
     <section class="gallery-section"></section>
-
-    <button class="download-btn" onclick="downloadMeme()">Download Meme</button>
 
     <footer>
         © Valeriy Kuvshinov 2023

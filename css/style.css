@@ -8,14 +8,6 @@ body {
     overflow-y: auto;
 }
 
-.canvas-options-container {
-    display: flex;
-    gap: 10px;
-    padding: 10px;
-    justify-content: center;
-    justify-items: center;
-}
-
 header {
     display: flex;
     margin: auto;
@@ -27,6 +19,7 @@ header {
     justify-content: center;
     align-items: center;
     margin-top: -1vh;
+    margin-bottom: 2vh;
 }
 
 h1 {
@@ -34,24 +27,63 @@ h1 {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.colors-width-shapes-options {
-    background-color: azure;
-    grid-column: span 1;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 2vh;
-    align-items: center;
-    justify-items: center;
-    font-weight: bold;
-    border: 2px solid black;
-    max-width: 450px;
-    padding: 10px;
-    border-radius: 10px;
+.meme-container {
+    display: flex;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    justify-content: center;
 }
 
-.colors-width-shapes-options label {
-    grid-column: 1 / -1;
+.meme-edit-options {
+    background-color: rgb(53, 53, 228);
+    display: flex;
+    max-width: 100%;
+    padding: 10px;
+}
+
+.meme-display {
+    display: flex;
+    max-width: 100%;
+}
+
+.main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 10px;
+    max-width: 100%;
+    margin: 0 auto;
+    justify-items: center;
+    align-items: center;
+}
+
+.text-input {
+    grid-column: 1 / span 4;
+}
+
+.one-col {
+    grid-column: span 1;
+}
+
+.two-col {
+    grid-column: span 2;
+}
+
+.sub-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    grid-column: 1 / span 4;
+    justify-items: center;
+    align-items: center;
+}
+
+#userText{
+    width: 90%;
+}
+
+#fontSelect{
+    width: 90%;
 }
 
 #uploadFile {
@@ -68,39 +100,23 @@ canvas {
 
 button {
     cursor: pointer;
+    height: 30px;
+    width: fit-content;
+    font-size: 20px;
 }
 
 .download-btn {
     width: fit-content;
-    height: 50px;
-    padding: 10px 20px;
-    display: flex;
-    margin: auto;
-    margin-bottom: 2vh;
-    margin-top: 2vh;
-    font-weight: bold;
-    font-size: 20px;
-    align-items: center;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 25px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: all 0.5s ease;
-}
-
-.download-btn:hover {
-    background-color: #0056b3;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    font-size: 15px;
 }
 
 #userColor {
     cursor: pointer;
-}
-
-.fontUp, .fontDown{
-    font-size: 15px;
+    width: 25px;
+    height: 25px;
+    background: white;
+    border: 1px solid black;
+    padding: 0;
 }
 
 .gallery-section {
@@ -112,8 +128,8 @@ button {
 }
 
 .gallery-section img {
-    width: 250px;
-    height: 250px;
+    max-width: 275px;
+    max-height: 275px;
     object-fit: contain;
     cursor: pointer;
 }
