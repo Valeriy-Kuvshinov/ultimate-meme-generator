@@ -1,8 +1,8 @@
 'use strict'
 
 let gTextColor = 'black'
-let gFontSize = 40
-let gLineHeight = 80
+let gFontSize = 20
+let gFontType = 'Arial'
 
 var gImgs = createImages()
 var gMeme = {
@@ -16,13 +16,18 @@ var gMeme = {
         }
     ]
 }
-var gKeywordSearchCountMap = { 'funny': 12, 'cat': 16, 'baby': 2 }
+var gKeywordSearchCountMap = {
+    'funny': 20, 'cat': 16, 'dog': 20, 'baby': 2, 'politics': 6, 'cute': 5
+    , 'trump': 10, 'obama': 12, 'work': 8, 'science': 4, 'aliens': 7, 'media': 10
+    , 'hope': 4, 'love': 3, 'matrix': 9, 'leonardo': 5, 'animals': 8, 'life': 2
+    , 'putin': 15, 'israel': 4
+}
 
 function drawText(text, x, y) {
     gCtx.lineWidth = 1
     gCtx.strokeStyle = gTextColor
     gCtx.fillStyle = gTextColor
-    gCtx.font = `${gFontSize}px Arial`
+    gCtx.font = `${gFontSize}px ${gFontType}`
     gCtx.textAlign = 'center'
     gCtx.textBaseline = 'middle'
 
@@ -38,6 +43,11 @@ function increaseFontSize() {
 function reduceFontSize() {
     if (gFontSize < 5) return
     gFontSize -= 5
+}
+
+function changeFont(selectedFont) {
+    gFontType = selectedFont
+    gCtx.font = `${gFontSize}px ${gFontType}`
 }
 
 function setColor(color) {

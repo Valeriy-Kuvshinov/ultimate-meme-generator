@@ -4,18 +4,41 @@ let gElCanvas
 let gCtx
 let gCanvasWidth
 let gCanvasHeight
-let gStrokeWidth = 1
 
 function onInit() {
     gElCanvas = document.querySelector('canvas')
     gCtx = gElCanvas.getContext('2d')
-    renderImages()
+    renderGallery()
     //addEventListeners()
-    //reloadDefaultSettings()
 
     gCanvasWidth = gElCanvas.width
     gCanvasHeight = gElCanvas.height
     console.log('gCtx', gCtx)
+}
+
+function renderMeme(imageUrl) {
+    const img = new Image()
+
+    img.onload = function() {
+        // Clear the canvas
+        gCtx.clearRect(0, 0, gElCanvas.width, gElCanvas.height)
+
+        // Draw the image
+        gCtx.drawImage(img, 0, 0, gElCanvas.width, gElCanvas.height)
+
+        // Draw top text
+        const topText = "Top Text"
+        const topTextX = gElCanvas.width / 2
+        const topTextY = 50
+        drawText(topText, topTextX, topTextY)
+
+        // Draw bottom text
+        const bottomText = "Bottom Text"
+        const bottomTextX = gElCanvas.width / 2
+        const bottomTextY = gElCanvas.height - 20 
+        drawText(bottomText, bottomTextX, bottomTextY)
+    };
+    img.src = imageUrl
 }
 
 function onSetColor(color) {
@@ -25,6 +48,10 @@ function onSetColor(color) {
 function onChangeFontSize(action) {
     if (action === '+') increaseFontSize()
     if (action === '-') reduceFontSize()
+}
+
+function onChangeFont(selectedFont){
+    changeFont(selectedFont)
 }
 
 // Clear the whole canvas
@@ -38,14 +65,8 @@ function onResetMeme() {
     gCanvasHeight = gElCanvas.height
 }
 
-function onAddText(ev) {
-    const { offsetX, offsetY } = ev
-    console.log('offsetX, offsetY:', offsetX, offsetY)
+function onAddText() {
 
-    let userSentence = prompt('Insert Text')
-    if (!userSentence) return
-
-    drawText(userSentence, offsetX, offsetY)
 }
 
 // function onImgUpload(img) {
@@ -81,24 +102,6 @@ function downloadMeme(elLink) {
     // Set a name for the downloaded file
     elLink.download = 'my-img'
 }
-
-function renderImages() {
-    const images = createImages()
-    const gallerySection = document.querySelector('.gallery-section')
-
-    images.forEach(image => {
-        const imgElement = document.createElement('img')
-        imgElement.src = image.url;
-        imgElement.alt = image.keywords.join(', ')
-
-        gallerySection.appendChild(imgElement)
-    })
-}
-
-// function reloadDefaultSettings() {
-//     $('#userColor').setValue('#000000')
-//     $('#uploadFile').setValue('')
-// }
 
 // function addEventListeners() {
 //     gElCanvas.addEventListener('mousedown', onMouseDown)
