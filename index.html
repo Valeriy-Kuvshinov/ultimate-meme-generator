@@ -27,16 +27,10 @@
 
         <section class="meme-edit-options">
             <div class="main-grid">
-                <input type="text" id="userText" name="userText" placeholder="Insert Text" class="text-input">
                 <button onclick="onAddText()" class="one-col"><i class="fa-regular fa-square-plus"></i></button>
+                <button onclick="onChangeText()" class="one-col"><i class="fa-solid fa-pencil"></i></button>
                 <button class="one-col"><i class="fa-solid fa-arrows-up-down"></i></button>
-                <button class="one-col"><i class="fa-solid fa-clock-rotate-left"></i></button>
                 <button onclick="onResetMeme()" class="one-col"><i class="fa-solid fa-trash-can"></i></button>
-
-                <button>💀</button>
-                <button>😂</button>
-                <button>😱</button>
-                <button>😭</button>
 
                 <div class="sub-grid">
                     <select class="two-col" id="fontSelect" onchange="onChangeFont(this.value)">
@@ -57,12 +51,29 @@
                     <button><i class="fa-solid fa-align-right"></i></button>
                 </div>
 
+                <button>💀</button>
+                <button>😂</button>
+                <button>😱</button>
+                <button>😭</button>
+                <button>💃🏼</button>
+                <button>🎵</button>
+                <button>😎</button>
+                <button>🙏🏼</button>
+
                 <button class="two-col download-btn" onclick="downloadMeme()">Download <i
                         class="fa-solid fa-arrow-down"></i></button>
-                <button class="two-col">Share <i class="fa-solid fa-share-from-square"></i></button>
+                <button class="two-col share-btn">Share <i class="fa-solid fa-share-from-square"></i></button>
             </div>
         </section>
     </section>
+
+    <div class="modal-wrapper">
+        <div class="text-input-modal">
+            <input type="text" id="userText" name="userText" placeholder="Insert Text" class="text-input">
+            <button onclick="onCloseModal()" class="close-btn">Close</button>
+            <button onclick="onSubmitText()" class="submit-btn">Submit</button>
+        </div>
+    </div>
 
     <h2>Image Gallery</h2>
     <section class="gallery-section"></section>

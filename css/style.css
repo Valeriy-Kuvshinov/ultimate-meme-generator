@@ -33,6 +33,11 @@ h1 {
     max-width: 1200px;
     margin: 0 auto;
     justify-content: center;
+    background-color: rgb(0, 103, 194);
+    width: fit-content;
+    padding: 25px;
+    border: 2px dotted black;
+    border-radius: 10px;
 }
 
 .meme-edit-options {
@@ -78,12 +83,12 @@ h1 {
     align-items: center;
 }
 
-#userText{
+#fontSelect {
     width: 90%;
-}
-
-#fontSelect{
-    width: 90%;
+    height: 30px;
+    font-size: 15px;
+    border: 2px solid black;
+    border-radius: 10px;
 }
 
 #uploadFile {
@@ -100,9 +105,11 @@ canvas {
 
 button {
     cursor: pointer;
-    height: 30px;
-    width: fit-content;
+    height: 40px;
+    width: 40px;
     font-size: 20px;
+    border: 2px solid black;
+    border-radius: 10px;
 }
 
 .download-btn {
@@ -110,13 +117,59 @@ button {
     font-size: 15px;
 }
 
+.share-btn {
+    width: fit-content;
+}
+
 #userColor {
     cursor: pointer;
-    width: 25px;
-    height: 25px;
+    width: 40px;
+    height: 40px;
     background: white;
-    border: 1px solid black;
+    border: 2px solid black;
     padding: 0;
+    border-radius: 3px;
+}
+
+.modal-wrapper{
+    display: none;
+}
+
+.text-input-modal {
+    position: fixed;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background-color: azure;
+    width: fit-content;
+    height: 100px;
+    gap: 10px;
+    padding: 10px;
+    justify-items: center;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.text-input-modal button {
+    width: fit-content;
+}
+
+#userText {
+    height: 25px;
+    grid-column: 1 / -1;
+    grid-row: 1;
+    width: 100%;
+}
+
+.close-btn {
+    grid-row: 2;
+    grid-column: 1 / 2;
+}
+
+.submit-btn {
+    grid-row: 2;
+    grid-column: 3 / 4;
 }
 
 .gallery-section {

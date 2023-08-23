@@ -6,12 +6,13 @@ function renderGallery() {
 
     images.forEach(image => {
         const imgElement = document.createElement('img')
-        imgElement.src = image.url;
+        imgElement.src = image.url
         imgElement.alt = image.keywords.join(', ')
 
         imgElement.addEventListener('click', function() {
+            onResetMeme()
             renderMeme(image.url)
         })
-        gallerySection.appendChild(imgElement);
+        gallerySection.appendChild(imgElement)
     })
 }
