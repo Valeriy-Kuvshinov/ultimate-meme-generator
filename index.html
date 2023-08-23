@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/e1fe5e848b.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <title>Meme Generator</title>
+</head>
+
+<body onload="onInit()">
+    <header>
+        <h1>Mister Canvas</h1>
+    </header>
+
+    <!-- <div>
+        <label for="uploadFile">Upload Image:</label>
+        <input type="file" id="uploadFile" onchange="onImgUpload(this.files[0])">
+    </div> -->
+
+    <section class="meme-container">
+        <section class="meme-edit-options grid-item">
+
+            <h4>Text Color:</h4>
+            <input type="color" id="userColor" value="#000000" onchange="onSetColor(this.value)">
+
+            <button onclick="onAddText()">Add Text</button>
+
+            <button class="fontUp" onclick="onChangeFontSize('+')">&#x1f5da;</button>
+            <button class="fontDown" onclick="onChangeFontSize('-')">&#x1f5db;</button>
+
+            <button><i class="fa-solid fa-align-left"></i></button>
+            <button><i class="fa-solid fa-align-justify"></i></button>
+            <button><i class="fa-solid fa-align-right"></i></button>
+
+            <button>Go a Step Back</button>
+            <button onclick="onResetMeme()">Reset</button>
+
+        </section>
+        <canvas width="500" height="500">
+        </canvas>
+    </section>
+
+    <h2>Image Gallery</h2>
+    <section class="gallery-section"></section>
+
+    <button class="download-btn" onclick="downloadMeme()">Download Meme</button>
+
+    <footer>
+        © Valeriy Kuvshinov 2023
+    </footer>
+
+    <script src="js/services/util.service.js"></script>
+    <script src="js/services/meme.service.js"></script>
+    <script src="js/meme.controller.js"></script>
+</body>
+
+</html>

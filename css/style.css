@@ -1,0 +1,127 @@
+body {
+    margin: 0;
+    text-align: center;
+    box-sizing: border-box;
+    background-color: lightblue;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.canvas-options-container {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    justify-content: center;
+    justify-items: center;
+}
+
+header {
+    display: flex;
+    margin: auto;
+    width: 100%;
+    padding: 1px;
+    background-color: rgb(11, 11, 43);
+    color: white;
+    height: 70px;
+    justify-content: center;
+    align-items: center;
+    margin-top: -1vh;
+}
+
+h1 {
+    text-decoration: underline;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.colors-width-shapes-options {
+    background-color: azure;
+    grid-column: span 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 2vh;
+    align-items: center;
+    justify-items: center;
+    font-weight: bold;
+    border: 2px solid black;
+    max-width: 450px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.colors-width-shapes-options label {
+    grid-column: 1 / -1;
+}
+
+#uploadFile {
+    cursor: pointer;
+    width: 135px;
+    grid-column: 1 / span 3;
+}
+
+canvas {
+    background-color: white;
+    border: 5px solid rgb(100, 63, 63);
+    border-radius: 5px;
+}
+
+button {
+    cursor: pointer;
+}
+
+.download-btn {
+    width: fit-content;
+    height: 50px;
+    padding: 10px 20px;
+    display: flex;
+    margin: auto;
+    margin-bottom: 2vh;
+    margin-top: 2vh;
+    font-weight: bold;
+    font-size: 20px;
+    align-items: center;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+
+.download-btn:hover {
+    background-color: #0056b3;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#userColor {
+    cursor: pointer;
+}
+
+.fontUp, .fontDown{
+    font-size: 15px;
+}
+
+.gallery-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    justify-items: center;
+    margin-bottom: 1vh;
+}
+
+.gallery-section img {
+    width: 250px;
+    height: 250px;
+    object-fit: contain;
+    cursor: pointer;
+}
+
+footer {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    padding: 5px;
+    background-color: antiquewhite;
+}
