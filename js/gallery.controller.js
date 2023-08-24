@@ -11,6 +11,8 @@ function renderGallery() {
 
         imgElement.addEventListener('click', function() {
             onResetMeme()
+            onAddLine()
+            onAddLine()
             renderMeme(image.url)
             console.log(image)
         })

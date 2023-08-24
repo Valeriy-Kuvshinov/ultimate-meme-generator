@@ -10,11 +10,12 @@ let gKeywordSearchCountMap = {
     , 'putin': 15, 'israel': 4
 }
 
-function drawText(text, x, y, color, fontSize, fontType, maxWidth, textAlign) {
+function drawText(text, x, y, color, fontSize, fontType, maxWidth, textAlign, isBold) {
+    let fontWeight = isBold ? 'bold' : 'normal'
     gCtx.lineWidth = 1
     gCtx.strokeStyle = color
     gCtx.fillStyle = color
-    gCtx.font = `${fontSize}px ${fontType}`
+    gCtx.font = `${fontWeight} ${fontSize}px ${fontType}`
 
     if (textAlign === 'left') x = 20
     else if (textAlign === 'right') x = gElCanvas.width - 12
@@ -84,10 +85,6 @@ function setColor(color) {
 
 function changeTextAlign(alignValue) {
     gMemeLines[gSelectedLineIdx].txtAlign = alignValue
-}
-
-function changeText(userText) {
-    gMemeLines[gSelectedLineIdx].txt = userText
 }
 
 function createLine(location, txt, lineIdx) {

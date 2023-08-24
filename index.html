@@ -20,15 +20,15 @@
         <input type="file" id="uploadFile" onchange="onImgUpload(this.files[0])">
     </div> -->
 
-    <section class="meme-container">
+    <main class="meme-container">
         <div class="meme-display">
             <canvas width="400" height="400"></canvas>
         </div>
 
         <section class="meme-edit-options">
             <div class="main-grid">
-                <button onclick="onAddText()" class="one-col"><i class="fa-regular fa-square-plus"></i></button>
-                <button onclick="onChangeText()" class="one-col"><i class="fa-solid fa-pencil"></i></button>
+                <button onclick="onAddLine()" class="one-col"><i class="fa-regular fa-square-plus"></i></button>
+                <button onclick="onRemoveLine()" class="one-col"><i class="fa-regular fa-square-minus"></i></button>
                 <button onclick="onToggleLine()" class="one-col"><i class="fa-solid fa-arrows-up-down"></i></button>
                 <button onclick="onResetMeme()" class="one-col"><i class="fa-solid fa-trash-can"></i></button>
 
@@ -42,7 +42,7 @@
                     </select>
                     <input type="color" id="userColor" value="#000000" onchange="onSetColor(this.value)">
 
-                    <button onclick="onChangeBold()"><i class="fa-solid fa-bold"></i></button>
+                    <button onclick="onToggleBold()"><i class="fa-solid fa-bold"></i></button>
                     <button onclick="onChangeFontSize('+')">&#x1f5da;</button>
                     <button onclick="onChangeFontSize('-')">&#x1f5db;</button>
 
@@ -51,32 +51,30 @@
                     <button onclick="onChangeTextAlign('right')"><i class="fa-solid fa-align-right"></i></button>
                 </div>
 
-                <button>💀</button>
-                <button>😂</button>
-                <button>😱</button>
-                <button>😭</button>
-                <button>💃🏼</button>
-                <button>🎵</button>
-                <button>😎</button>
-                <button>🙏🏼</button>
+                <input type="text" id="userText" name="userText" oninput="setLineTxt()" class="text-input"
+                    placeholder="insert text per line (after selecting)">
+                <button class="one-col">💀</button>
+                <button class="one-col">😂</button>
+                <button class="one-col">😱</button>
+                <button class="one-col">😭</button>
+                <button class="one-col">💃🏼</button>
+                <button class="one-col">🎵</button>
+                <button class="one-col">😎</button>
+                <button class="one-col">🙏🏼</button>
 
-                <button class="two-col download-btn" onclick="downloadMeme()">Download <i
-                        class="fa-solid fa-arrow-down"></i></button>
-                <button class="two-col share-btn">Share <i class="fa-solid fa-share-from-square"></i></button>
+                <div class="two-col download-link-area">
+                    <a href="#" class="download-link" onclick="downloadMeme(this)" download="my-img.jpg">Download <i
+                            class="fa-solid fa-arrow-down"></i></a>
+                </div>
+                <button class="two-col share-btn">Share it! <i class="fa-solid fa-share-from-square"></i></button>
             </div>
         </section>
-    </section>
+    </main>
 
-    <div class="modal-wrapper">
-        <div class="text-input-modal">
-            <input type="text" id="userText" name="userText" placeholder="Insert Text" class="text-input">
-            <button onclick="onCloseModal()" class="close-btn">Close</button>
-            <button onclick="onSubmitText()" class="submit-btn">Submit</button>
-        </div>
+    <div class="gallery-section-wrapper">
+        <h2>IMAGE GALLERY</h2>
+        <section class="gallery-section"></section>
     </div>
-
-    <h2>Image Gallery</h2>
-    <section class="gallery-section"></section>
 
     <footer>
         © Valeriy Kuvshinov 2023
