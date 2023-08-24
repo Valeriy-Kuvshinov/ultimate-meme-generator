@@ -11,7 +11,7 @@ function onInit() {
     gElCanvas = document.querySelector('canvas')
     gCtx = gElCanvas.getContext('2d')
     renderGallery()
-    //addEventListeners()
+    addEventListeners()
 
     gCanvasWidth = gElCanvas.width
     gCanvasHeight = gElCanvas.height
@@ -27,46 +27,64 @@ function renderMeme(imageUrl) {
 
         gMemeLines.forEach((line, idx) => {
             const y = line.location === 'top' ? 50 : line.location === 'middle' ? gElCanvas.height / 2 : gElCanvas.height - 50
-            drawText(line.txt, gElCanvas.width / 2, y, line.color, line.fontSize, line.fontType)
+            const lineHeights = drawText(line.txt, gElCanvas.width / 2, y, line.color
+                , line.fontSize, line.fontType, gElCanvas.width - 20, line.txtAlign)
 
             // Highlight the selected line
             if (gSelectedLineIdx === idx) {
-                gCtx.strokeStyle = 'red'
-                gCtx.strokeRect(10, y - line.fontSize / 2, gElCanvas.width - 20, line.fontSize)
+                lineHeights.forEach(yPosition => {
+                    const textWidth = gCtx.measureText(line.txt).width
+
+                    let x = (gElCanvas.width - textWidth) / 2
+                    if (line.txtAlign === 'left') x = 20
+                    else if (line.txtAlign === 'right') x = gElCanvas.width - textWidth - 20
+
+                    const padding = 10
+                    drawSelectedBorder(x - padding, yPosition - line.fontSize / 2 - padding
+                        , textWidth + 2 * padding, line.fontSize + 2 * padding, 10, 'rgba(255, 255, 255, 0.3)')
+                })
+                drawText(line.txt, gElCanvas.width / 2, y, line.color, line.fontSize
+                    , line.fontType, gElCanvas.width - 30, line.txtAlign)
             }
         })
     }
     img.src = imageUrl
-    
-    gElCanvas.addEventListener('click', function(event) {
-        let rect = gElCanvas.getBoundingClientRect()
-        let x = event.clientX - rect.left
-        let y = event.clientY - rect.top
-        
-        gMemeLines.forEach((line, idx) => {
-            let lineY = line.location === 'top' ? 50 : line.location === 'middle' ? gElCanvas.height / 2 : gElCanvas.height - 50
-
-            if (y > lineY - line.fontSize / 2 && y < lineY + line.fontSize / 2) {
-                gSelectedLineIdx = idx
-                renderMeme(gCurrentImage)
-            }
-        })
-    })
 }
 
 function onSetColor(color) {
+    if (!gMemeLines[gSelectedLineIdx]) return
+
     setColor(color)
     renderMeme(gCurrentImage)
 }
 
 function onChangeFontSize(action) {
+    if (!gMemeLines[gSelectedLineIdx]) return
+
     if (action === '+') increaseFontSize()
     if (action === '-') reduceFontSize()
     renderMeme(gCurrentImage)
 }
 
 function onChangeFont(selectedFont) {
+    if (!gMemeLines[gSelectedLineIdx]) return
+
     changeFont(selectedFont)
+    renderMeme(gCurrentImage)
+}
+
+function onChangeTextAlign(alignValue) {
+    if (!gMemeLines[gSelectedLineIdx]) return
+
+    changeTextAlign(alignValue)
+    renderMeme(gCurrentImage)
+}
+
+function onToggleLine() {
+    if (gSelectedLineIdx === null || gSelectedLineIdx === gMemeLines.length - 1) {
+        gSelectedLineIdx = 0
+    } else gSelectedLineIdx++
+
     renderMeme(gCurrentImage)
 }
 
@@ -96,7 +114,7 @@ function onAddText() {
     }
 }
 
-function onChangeText(){
+function onChangeText() {
     if (!gMemeLines[gSelectedLineIdx]) return
 
     const elModal = document.querySelector('.modal-wrapper')
@@ -105,7 +123,7 @@ function onChangeText(){
 
 function onSubmitText() {
     const userText = document.getElementById('userText').value
-    if(userText === '') return
+    if (userText === '') return
 
     changeText(userText)
     renderMeme(gCurrentImage)
@@ -145,11 +163,24 @@ function downloadMeme(elLink) {
     elLink.download = 'my-img'
 }
 
-// function addEventListeners() {
-//     gElCanvas.addEventListener('mousedown', onMouseDown)
-//     gElCanvas.addEventListener('mousemove', onMouseMove)
-//     gElCanvas.addEventListener('mouseup', onMouseUp)
-// }
+function addEventListeners() {
+    gElCanvas.addEventListener('click', onClickText)
+}
+
+function onClickText(event) {
+    let rect = gElCanvas.getBoundingClientRect()
+    let x = event.clientX - rect.left
+    let y = event.clientY - rect.top
+
+    gMemeLines.forEach((line, idx) => {
+        let lineY = line.location === 'top' ? 50 : line.location === 'middle' ? gElCanvas.height / 2 : gElCanvas.height - 50
+
+        if (y > lineY - line.fontSize / 2 && y < lineY + line.fontSize / 2) {
+            gSelectedLineIdx = idx
+            renderMeme(gCurrentImage)
+        }
+    })
+}
 
 // function onMouseDown() {
 //     gIsDrawing = true
@@ -166,7 +197,7 @@ function downloadMeme(elLink) {
 //     gIsDrawing = false
 // }
 
-function onCloseModal(){
+function onCloseModal() {
     const elModal = document.querySelector('.modal-wrapper')
     elModal.style.display = 'none'
 }

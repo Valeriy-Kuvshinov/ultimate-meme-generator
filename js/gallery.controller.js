@@ -12,6 +12,7 @@ function renderGallery() {
         imgElement.addEventListener('click', function() {
             onResetMeme()
             renderMeme(image.url)
+            console.log(image)
         })
         gallerySection.appendChild(imgElement)
     })

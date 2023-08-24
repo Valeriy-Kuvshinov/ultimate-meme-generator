@@ -29,7 +29,7 @@
             <div class="main-grid">
                 <button onclick="onAddText()" class="one-col"><i class="fa-regular fa-square-plus"></i></button>
                 <button onclick="onChangeText()" class="one-col"><i class="fa-solid fa-pencil"></i></button>
-                <button class="one-col"><i class="fa-solid fa-arrows-up-down"></i></button>
+                <button onclick="onToggleLine()" class="one-col"><i class="fa-solid fa-arrows-up-down"></i></button>
                 <button onclick="onResetMeme()" class="one-col"><i class="fa-solid fa-trash-can"></i></button>
 
                 <div class="sub-grid">
@@ -42,13 +42,13 @@
                     </select>
                     <input type="color" id="userColor" value="#000000" onchange="onSetColor(this.value)">
 
-                    <button><i class="fa-solid fa-bold"></i></button>
+                    <button onclick="onChangeBold()"><i class="fa-solid fa-bold"></i></button>
                     <button onclick="onChangeFontSize('+')">&#x1f5da;</button>
                     <button onclick="onChangeFontSize('-')">&#x1f5db;</button>
 
-                    <button><i class="fa-solid fa-align-left"></i></button>
-                    <button><i class="fa-solid fa-align-justify"></i></button>
-                    <button><i class="fa-solid fa-align-right"></i></button>
+                    <button onclick="onChangeTextAlign('left')"><i class="fa-solid fa-align-left"></i></button>
+                    <button onclick="onChangeTextAlign('center')"><i class="fa-solid fa-align-justify"></i></button>
+                    <button onclick="onChangeTextAlign('right')"><i class="fa-solid fa-align-right"></i></button>
                 </div>
 
                 <button>💀</button>
