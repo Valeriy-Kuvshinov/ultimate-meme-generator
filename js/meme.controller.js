@@ -374,8 +374,45 @@ function onMouseUp() {
 
 function onTouchStart(event) {
     event.preventDefault()
-    if (gIsLineSelected) { // Check if any line is selected
-        gIsDragging = true
+
+    let rect = gElCanvas.getBoundingClientRect()
+    let touch = event.touches[0]
+    let x = touch.clientX - rect.left
+    let y = touch.clientY - rect.top
+
+    let isAnyLineTouched = false // Flag to track if any line was touched
+
+    // Logic to detect which line was touched
+    gMemeLines.forEach((line, idx) => {
+        gCtx.font = `${line.fontSize}px ${line.fontType}`
+        gCtx.textAlign = line.txtAlign
+
+        let lineY = (line.location === 'top' ? 50 : line.location === 'middle'
+            ? gElCanvas.height / 2 : gElCanvas.height - 50) + line.y
+
+        let textWidth = gCtx.measureText(line.txt).width
+        let startX = (gElCanvas.width - textWidth) / 2
+
+        if (line.txtAlign === 'left') startX = 20;
+        else if (line.txtAlign === 'right') startX = gElCanvas.width - textWidth - 20
+
+        if (y > lineY - line.fontSize / 2 && y < lineY + line.fontSize / 2 &&
+            x > startX && x < startX + textWidth) {
+            isAnyLineTouched = true // Update the flag
+            gIsLineSelected = true
+            gSelectedLineIdx = idx
+            gIsDragging = true
+
+            renderMeme(gCurrentImage)
+        }
+    })
+    // Deselect a line, if touched outside of the line (not on the text)
+    if (!isAnyLineTouched) {
+        gIsLineSelected = false
+        gSelectedLineIdx = null // Set to null or any invalid index
+        gIsDragging = false
+
+        renderMeme(gCurrentImage)
     }
 }
 
