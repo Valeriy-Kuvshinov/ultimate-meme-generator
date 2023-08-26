@@ -256,6 +256,11 @@ function addEventListeners() {
     gElCanvas.addEventListener('mousemove', onMouseMove)
     gElCanvas.addEventListener('mouseup', onMouseUp)
 
+    // Touch events for when the user drags a line
+    gElCanvas.addEventListener('touchstart', onTouchStart)
+    gElCanvas.addEventListener('touchmove', onTouchMove)
+    gElCanvas.addEventListener('touchend', onTouchEnd)
+
     // Keyboard event for arrow keys
     window.addEventListener('keydown', function (event) {
         // If an arrow key is pressed, call the appropriate function
@@ -269,6 +274,41 @@ function addEventListeners() {
             onMoveDown()
         }
     })
+}
+
+function onShareToFacebook() {
+    const imgDataUrl = gElCanvas.toDataURL('image/jpeg')
+
+    function onSuccess(uploadedImgUrl) {
+        // Handle some special characters
+        const url = encodeURIComponent(uploadedImgUrl)
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&t=${url}`)
+    }
+    // Send the image to the server
+    doUploadImg(imgDataUrl, onSuccess)
+}
+
+function doUploadImg(imgDataUrl, onSuccess) {
+    // Pack the image for delivery
+    const formData = new FormData()
+    formData.append('img', imgDataUrl)
+
+    // Send a post req with the image to the server
+    const XHR = new XMLHttpRequest()
+    XHR.onreadystatechange = () => {
+        if (XHR.readyState !== XMLHttpRequest.DONE) return
+        if (XHR.status !== 200) return console.error('Error uploading image')
+
+        const { responseText: url } = XHR
+
+        console.log('Got back live url:', url)
+        onSuccess(url)
+    }
+    XHR.onerror = (req, ev) => {
+        console.error('Error connecting to server with request:', req, '\nGot response data:', ev)
+    }
+    XHR.open('POST', '//ca-upload.com/here/upload.php')
+    XHR.send(formData)
 }
 
 // Function to check if a text line is clicked on the canvas
@@ -307,41 +347,6 @@ function onClickText(event) {
     }
 }
 
-function onShareToFacebook() {
-    const imgDataUrl = gElCanvas.toDataURL('image/jpeg')
-
-    function onSuccess(uploadedImgUrl) {
-        // Handle some special characters
-        const url = encodeURIComponent(uploadedImgUrl)
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&t=${url}`)
-    }
-    // Send the image to the server
-    doUploadImg(imgDataUrl, onSuccess)
-}
-
-function doUploadImg(imgDataUrl, onSuccess) {
-    // Pack the image for delivery
-    const formData = new FormData()
-    formData.append('img', imgDataUrl)
-
-    // Send a post req with the image to the server
-    const XHR = new XMLHttpRequest()
-    XHR.onreadystatechange = () => {
-        if (XHR.readyState !== XMLHttpRequest.DONE) return
-        if (XHR.status !== 200) return console.error('Error uploading image')
-
-        const { responseText: url } = XHR
-
-        console.log('Got back live url:', url)
-        onSuccess(url)
-    }
-    XHR.onerror = (req, ev) => {
-        console.error('Error connecting to server with request:', req, '\nGot response data:', ev)
-    }
-    XHR.open('POST', '//ca-upload.com/here/upload.php')
-    XHR.send(formData)
-}
-
 function onMouseDown() {
     if (gIsLineSelected) { // Check if any line is selected
         gIsDragging = true
@@ -356,13 +361,42 @@ function onMouseMove(event) {
 
     // Update the x and y coordinates of the selected line
     gMemeLines[gSelectedLineIdx].x = x - gElCanvas.width / 2
-    gMemeLines[gSelectedLineIdx].y = y - (gMemeLines[gSelectedLineIdx].location === 'top' 
-    ? 50 : gMemeLines[gSelectedLineIdx].location === 'middle' 
-    ? gElCanvas.height / 2 : gElCanvas.height - 50)
+    gMemeLines[gSelectedLineIdx].y = y - (gMemeLines[gSelectedLineIdx].location === 'top'
+        ? 50 : gMemeLines[gSelectedLineIdx].location === 'middle'
+            ? gElCanvas.height / 2 : gElCanvas.height - 50)
 
     renderMeme(gCurrentImage)
 }
 
 function onMouseUp() {
+    gIsDragging = false
+}
+
+function onTouchStart(event) {
+    event.preventDefault()
+    if (gIsLineSelected) { // Check if any line is selected
+        gIsDragging = true
+    }
+}
+
+function onTouchMove(event) {
+    event.preventDefault()
+    if (!gIsDragging || !gIsLineSelected) return
+    let rect = gElCanvas.getBoundingClientRect()
+    let touch = event.touches[0]
+    let x = touch.clientX - rect.left
+    let y = touch.clientY - rect.top
+
+    // Update the x and y coordinates of the selected line
+    gMemeLines[gSelectedLineIdx].x = x - gElCanvas.width / 2
+    gMemeLines[gSelectedLineIdx].y = y - (gMemeLines[gSelectedLineIdx].location === 'top'
+        ? 50 : gMemeLines[gSelectedLineIdx].location === 'middle'
+            ? gElCanvas.height / 2 : gElCanvas.height - 50)
+
+    renderMeme(gCurrentImage)
+}
+
+function onTouchEnd(event) {
+    event.preventDefault()
     gIsDragging = false
 }
