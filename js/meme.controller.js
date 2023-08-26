@@ -3,8 +3,9 @@
 let gElCanvas // Canvas element
 let gCtx // Canvas rendering context
 let gCurrentImage = null // Currently selected image URL
-let gIsLineSelected = true // Flag to check if any line is selected
+let gIsLineSelected = false // Flag to check if any line is selected
 let gSelectedLineIdx = null // Currently selected line index
+let gIsDragging = false // Flag to check if any line is being dragged
 
 // Initialization function
 function onInit() {
@@ -12,11 +13,8 @@ function onInit() {
     gElCanvas = document.querySelector('canvas')
     gCtx = gElCanvas.getContext('2d')
 
-    // Render initial gallery
-    renderGallery(gImgs)
-
-    // Attach event listeners to elements
-    addEventListeners()
+    renderGallery(gImgs) // Render initial gallery
+    addEventListeners() // Attach event listeners to elements
 }
 
 // Function to render a meme on canvas
@@ -32,17 +30,30 @@ function renderMeme(imageUrl) {
         gMemeLines.forEach((line, idx) => {
             let y = (line.location === 'top' ? 50 : line.location === 'middle'
                 ? gElCanvas.height / 2 : gElCanvas.height - 50) + line.y
-
             let x = (gElCanvas.width / 2) + line.x
 
-            drawText(line.txt, x, y, line.color, line.fontSize, line.fontType, gElCanvas.width - 30, line.txtAlign, line.isBold)
+            // Adjust x position based on text alignment
+            if (line.txtAlign === 'left') x = 20
+            else if (line.txtAlign === 'right') x = gElCanvas.width - 20
 
-            // Highlight the selected line
+            const lineHeights = drawText(line.txt, x, y, line.color, line.fontSize, line.fontType
+                , gElCanvas.width - 30, line.txtAlign, line.isBold)
+
+            const textWidth = gCtx.measureText(line.txt).width
+            let padding = 10
+
+            // Calculate where the rectangle should start based on text alignment
+            let rectX = x - textWidth / 2 - padding
+
+            if (line.txtAlign === 'left') rectX = x - padding
+            else if (line.txtAlign === 'right') rectX = x - textWidth - padding - 5
+
+            let rectY = y - line.fontSize / 2 - padding
+
+            // Draw the rectangle around the selected line
             if (gIsLineSelected && gSelectedLineIdx === idx) {
-                const textWidth = gCtx.measureText(line.txt).width
-                let padding = 10
-                drawSelectedBorder(x - textWidth / 2 - padding, y - line.fontSize / 2 - padding, textWidth + 2 * padding, line.fontSize + 2 * padding, 10, 'rgba(255, 255, 255, 0.3)')
-                drawText(line.txt, x, y, line.color, line.fontSize, line.fontType, gElCanvas.width - 30, line.txtAlign, line.isBold)
+                drawSelectedBorder(rectX, rectY, textWidth + 2 * padding, line.fontSize + 2
+                    * padding, 10, 'rgba(255, 255, 255, 0.3)')
             }
         })
     }
@@ -194,7 +205,7 @@ function onImgUpload(e) {
     }
     let imageURL = URL.createObjectURL(img)
 
-    gCurrentImage = imageURL // Assuming you have a global variable for this
+    gCurrentImage = imageURL
 
     let imageObj = new Image()
     imageObj.onload = function () {
@@ -239,6 +250,11 @@ function addEventListeners() {
 
     // Click event on canvas to select a text line
     gElCanvas.addEventListener('click', onClickText)
+
+    // Mouse events for when the user drags a line
+    gElCanvas.addEventListener('mousedown', onMouseDown)
+    gElCanvas.addEventListener('mousemove', onMouseMove)
+    gElCanvas.addEventListener('mouseup', onMouseUp)
 
     // Keyboard event for arrow keys
     window.addEventListener('keydown', function (event) {
@@ -324,4 +340,29 @@ function doUploadImg(imgDataUrl, onSuccess) {
     }
     XHR.open('POST', '//ca-upload.com/here/upload.php')
     XHR.send(formData)
+}
+
+function onMouseDown() {
+    if (gIsLineSelected) { // Check if any line is selected
+        gIsDragging = true
+    }
+}
+
+function onMouseMove(event) {
+    if (!gIsDragging || !gIsLineSelected) return
+    let rect = gElCanvas.getBoundingClientRect()
+    let x = event.clientX - rect.left
+    let y = event.clientY - rect.top
+
+    // Update the x and y coordinates of the selected line
+    gMemeLines[gSelectedLineIdx].x = x - gElCanvas.width / 2
+    gMemeLines[gSelectedLineIdx].y = y - (gMemeLines[gSelectedLineIdx].location === 'top' 
+    ? 50 : gMemeLines[gSelectedLineIdx].location === 'middle' 
+    ? gElCanvas.height / 2 : gElCanvas.height - 50)
+
+    renderMeme(gCurrentImage)
+}
+
+function onMouseUp() {
+    gIsDragging = false
 }
