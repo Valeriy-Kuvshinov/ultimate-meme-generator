@@ -1,0 +1,201 @@
+
+@media screen and (min-width: 320px) {
+    header h1 {
+        font-size: 21px;
+    }
+
+    .meme-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .meme-display,
+    .meme-edit-options {
+        width: 97%;
+        justify-content: center;
+        position: relative;
+    }
+
+    canvas {
+        width: 300px;
+        height: 400px;
+    }
+
+    .gallery-section {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 20px;
+        justify-items: center;
+        margin-bottom: 5vh;
+    }
+
+    .gallery-section img {
+        max-width: 250px 300px;
+        max-height: 250px 300px;
+        object-fit: contain;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+}
+
+@media screen and (min-width: 400px) {
+    canvas {
+        width: 350px;
+        height: 400px;
+    }
+}
+
+@media screen and (min-width: 500px) {
+    header h1 {
+        font-size: 25px;
+    }
+
+    .meme-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .meme-display,
+    .meme-edit-options {
+        width: 97%;
+        justify-content: center;
+        position: relative;
+    }
+
+    .meme-edit-options::before,
+    .meme-edit-options::after {
+        content: "";
+        position: absolute;
+        height: 100.6%;
+        width: 60px;
+        background-color: #110733;
+        border-radius: 10px;
+        margin-top: -6px;
+    }
+
+    .meme-edit-options::before {
+        left: 0;
+    }
+
+    .meme-edit-options::after {
+        right: 0;
+    }
+
+    .gallery-section {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        justify-items: center;
+        margin-bottom: 5vh;
+    }
+
+    .gallery-section img {
+        max-width: 225px;
+        max-height: 225px;
+        object-fit: contain;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+
+    canvas {
+        width: 400px;
+        height: 400px;
+    }
+}
+
+@media screen and (min-width: 735px) {
+    .meme-container {
+        flex-direction: row;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .meme-edit-options {
+        width: 100%;
+        padding: 5px;
+    }
+
+    .gallery-section img {
+        max-width: 300px;
+        max-height: 300px;
+        object-fit: contain;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+
+    .meme-edit-options::before,
+    .meme-edit-options::after {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .gallery-section {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        justify-items: center;
+        margin-bottom: 5vh;
+    }
+
+    .gallery-section img {
+        max-width: 250px;
+        max-height: 250px;
+        object-fit: contain;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+
+    .meme-edit-options::before,
+    .meme-edit-options::after {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .gallery-section {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        justify-items: center;
+        margin-bottom: 5vh;
+    }
+
+    .gallery-section img {
+        max-width: 250px;
+        max-height: 250px;
+        object-fit: contain;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+}
+
+@media screen and (min-width: 1500px) {
+    .gallery-section img {
+        max-width: 275px;
+        max-height: 275px;
+        object-fit: contain;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+}
+
+@media screen and (min-width: 1800px) {
+    .gallery-section {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 20px;
+        justify-items: center;
+        margin-bottom: 5vh;
+    }
+
+    .gallery-section img {
+        max-width: 300px;
+        max-height: 300px;
+        object-fit: contain;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+}
