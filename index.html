@@ -15,10 +15,23 @@
         <h1>Ultimate Meme Generator</h1>
     </header>
 
-    <!-- <div>
-        <label for="uploadFile">Upload Image:</label>
-        <input type="file" id="uploadFile" onchange="onImgUpload(this.files[0])">
-    </div> -->
+    <article class="heads-up">
+        <h2>Before we begin....</h2>
+        <h4>You can add middle line or remove a line from the meme</h4>
+        <h4>The up-down arrow toggles between lines</h4>
+        <h4>The trashcan icon clears the canvas entirely</h4>
+        <h2>Editing is done seperately for each line</h2>
+        <h4>By default, the top line is selected</h4>
+        <h4>You can change the color, bold status, font size, font type and text alignment of a line</h4>
+        <h4>Changing the text of a line is done by the input field</h4>
+        <h4>To move a line, use the arrow / WASD keys on the keyboard</h4>
+        <h2>Other options</h2>
+        <h4>Clicking on "I'm Flexible" gives you a random image from the gallery</h4>
+        <h4>The Download options saves the meme in a PNG format</h4>
+        <h4>You may use an image of your own via the Upload option</h4>
+        <h4>You can share your meme on Facebook!</h4>
+        <h4>Have fun!</h4>
+    </article>
 
     <main class="meme-container">
         <div class="meme-display">
@@ -27,20 +40,23 @@
 
         <section class="meme-edit-options">
             <div class="main-grid">
+                <div class="meme-edit-options-title">
+                    <h2>Meme Editing Options</h2>
+                </div>
                 <button onclick="onAddLine()" class="one-col"><i class="fa-regular fa-square-plus"></i></button>
                 <button onclick="onRemoveLine()" class="one-col"><i class="fa-regular fa-square-minus"></i></button>
                 <button onclick="onToggleLine()" class="one-col"><i class="fa-solid fa-arrows-up-down"></i></button>
                 <button onclick="onResetMeme()" class="one-col"><i class="fa-solid fa-trash-can"></i></button>
 
                 <div class="sub-grid">
-                    <select class="two-col" id="fontSelect" onchange="onChangeFont(this.value)">
-                        <option value="Arial">Arial</option>
+                    <select class="two-col" id="font-select" onchange="onChangeFont(this.value)">
+                        <option value="Impact">Impact</option>
                         <option value="Verdana">Verdana</option>
-                        <option value="Helvetica">Helvetica</option>
+                        <option value="Arial">Arial</option>
                         <option value="Times New Roman">Times New Roman</option>
                         <option value="Courier New">Courier New</option>
                     </select>
-                    <input type="color" id="userColor" value="#000000" onchange="onSetColor(this.value)">
+                    <input type="color" id="userColor" value="#00000" onchange="onSetColor(this.value)">
 
                     <button onclick="onToggleBold()"><i class="fa-solid fa-bold"></i></button>
                     <button onclick="onChangeFontSize('+')">&#x1f5da;</button>
@@ -53,26 +69,26 @@
 
                 <input type="text" id="userText" name="userText" oninput="setLineTxt()" class="text-input"
                     placeholder="insert text per line (after selecting)">
-                <button class="one-col">💀</button>
-                <button class="one-col">😂</button>
-                <button class="one-col">😱</button>
-                <button class="one-col">😭</button>
-                <button class="one-col">💃🏼</button>
-                <button class="one-col">🎵</button>
-                <button class="one-col">😎</button>
-                <button class="one-col">🙏🏼</button>
+                <button onclick="onChooseRandom()" class="two-col flexible-btn">I'm Flexible</button>
+                <label for="file-upload" class="two-col custom-file-upload">
+                    Upload <i class="fa-solid fa-image"></i>
+                </label>
+                <input id="file-upload" type="file" style="display:none;" onchange="onImgUpload(event)" />
 
                 <div class="two-col download-link-area">
                     <a href="#" class="download-link" onclick="downloadMeme(this)" download="my-img.jpg">Download <i
                             class="fa-solid fa-arrow-down"></i></a>
                 </div>
-                <button class="two-col share-btn">Share it! <i class="fa-solid fa-share-from-square"></i></button>
+                <button onclick="onShareToFacebook()" class="two-col share-btn">Share to <i class="fa-brands fa-square-facebook"></i></button>
             </div>
         </section>
     </main>
 
     <div class="gallery-section-wrapper">
         <h2>IMAGE GALLERY</h2>
+        <input type="text" id="image-search"
+            placeholder="Search by Funny, Politics, Cute, Life, Media, Work, Animals, Israel, Science"
+            oninput="filterGallery()" />
         <section class="gallery-section"></section>
     </div>
 

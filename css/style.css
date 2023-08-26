@@ -1,3 +1,4 @@
+
 body {
     margin: 0;
     text-align: center;
@@ -20,6 +21,13 @@ header {
     align-items: center;
     margin-top: -1vh;
     margin-bottom: 2vh;
+}
+
+.heads-up{
+    width: 65%;
+    text-align: center;
+    margin: auto;
+    font-size: 12px;
 }
 
 h1 {
@@ -67,6 +75,18 @@ h1 {
     align-items: center;
 }
 
+.meme-edit-options-title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column: 1 / 4 span;
+    width: 100%;
+    font-size: 15px;
+    background-color: #0a0949;
+    border-radius: 10px;
+    height: 40px;
+}
+
 .text-input {
     grid-column: 1 / span 4;
     border-radius: 10px;
@@ -95,7 +115,7 @@ h1 {
     align-items: center;
 }
 
-#fontSelect {
+#font-select {
     width: 90%;
     height: 30px;
     font-size: 15px;
@@ -103,10 +123,11 @@ h1 {
     border-radius: 10px;
 }
 
-#uploadFile {
-    cursor: pointer;
-    width: 135px;
-    grid-column: 1 / span 3;
+#image-search{
+    margin-bottom: 3vh;
+    width: 50%;
+    height: 30px;
+    border-radius: 10px;
 }
 
 canvas {
@@ -122,6 +143,7 @@ button {
     font-size: 20px;
     border: 2px solid black;
     border-radius: 10px;
+    padding: 4px;
 }
 
 .download-link {
@@ -134,23 +156,35 @@ button {
     cursor: pointer;
     border-radius: 10px;
     font-size: 18px;
-    margin-left: 5px;
-    padding: 8px;
+    padding: 6px;
 }
 
-.download-link:hover {
+.download-link:hover,
+.share-btn:hover,
+.flexible-btn:hover,
+.custom-file-upload:hover {
     background-color: #0056b3;
     border: 2px solid #003d80;
 }
 
 .share-btn {
-    width: fit-content;
-    margin-left: 5px;
+    width: 100%;
 }
 
-.share-btn:hover {
-    background-color: #0056b3;
-    border: 2px solid #003d80;
+.flexible-btn {
+    width: 100%;
+}
+
+.custom-file-upload {
+    width: 90%;
+    display: inline-block;
+    padding: 6px;
+    font-size: 21px;
+    cursor: pointer;
+    color: black;
+    background-color: white;
+    border-radius: 10px;
+    border: 2px solid black;
 }
 
 #userColor {
@@ -193,8 +227,8 @@ button {
 }
 
 .gallery-section img {
-    max-width: 275px;
-    max-height: 275px;
+    max-width: 250px;
+    max-height: 250px;
     object-fit: contain;
     cursor: pointer;
     border-radius: 10px;
@@ -213,4 +247,199 @@ footer {
     padding: 5px;
     background-color: antiquewhite;
     color: black;
+}
+
+
+@media screen and (min-width: 320px) {
+    header h1{
+        font-size: 21px;
+    }
+
+    .meme-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .meme-display,
+    .meme-edit-options {
+        width: 97%;
+        justify-content: center;
+        position: relative;
+    }
+
+    .meme-display canvas {
+        width: 300px;
+        height: 300px;
+    }
+
+    .gallery-section {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 20px;
+        justify-items: center;
+        margin-bottom: 5vh;
+    }
+
+    .gallery-section img {
+        max-width: 250px 300px;
+        max-height: 250px 300px;
+        object-fit: contain;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+}
+
+@media screen and (min-width: 500px) {
+    header h1{
+        font-size: 25px;
+    }
+
+    .meme-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .meme-display,
+    .meme-edit-options {
+        width: 97%;
+        justify-content: center;
+        position: relative;
+    }
+
+    .meme-edit-options::before,
+    .meme-edit-options::after {
+        content: "";
+        position: absolute;
+        height: 100.6%;
+        width: 60px;
+        background-color: #110733;
+        border-radius: 10px;
+        margin-top: -6px;
+    }
+
+    .meme-edit-options::before {
+        left: 0;
+    }
+
+    .meme-edit-options::after {
+        right: 0;
+    }
+
+    .gallery-section {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        justify-items: center;
+        margin-bottom: 5vh;
+    }
+
+    .gallery-section img {
+        max-width: 225px;
+        max-height: 225px;
+        object-fit: contain;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+
+    .meme-display canvas {
+        width: 400px;
+        height: 400px;
+    }
+}
+
+@media screen and (min-width: 735px) {
+    .meme-container {
+        flex-direction: row;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .meme-edit-options {
+        width: 100%;
+        padding: 5px;
+    }
+
+    .gallery-section img {
+        max-width: 300px;
+        max-height: 300px;
+        object-fit: contain;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+
+    .meme-edit-options::before,
+    .meme-edit-options::after {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .gallery-section {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        justify-items: center;
+        margin-bottom: 5vh;
+    }
+
+    .gallery-section img {
+        max-width: 250px;
+        max-height: 250px;
+        object-fit: contain;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+
+    .meme-edit-options::before,
+    .meme-edit-options::after {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .gallery-section {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        justify-items: center;
+        margin-bottom: 5vh;
+    }
+
+    .gallery-section img {
+        max-width: 250px;
+        max-height: 250px;
+        object-fit: contain;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+}
+
+@media screen and (min-width: 1500px) {
+    .gallery-section img {
+        max-width: 275px;
+        max-height: 275px;
+        object-fit: contain;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+}
+
+@media screen and (min-width: 1800px) {
+    .gallery-section {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 20px;
+        justify-items: center;
+        margin-bottom: 5vh;
+    }
+
+    .gallery-section img {
+        max-width: 300px;
+        max-height: 300px;
+        object-fit: contain;
+        cursor: pointer;
+        border-radius: 10px;
+    }
 }

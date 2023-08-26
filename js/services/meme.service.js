@@ -1,38 +1,51 @@
 'use strict'
 
-let gImgs = createImages()
-let gMemeLines = []
+let gImgs = createImages() // Global array to hold image objects
+let gMemeLines = [] // Global array to hold meme line objects
 
+// Object map to hold the keyword search counts for categories (and to search with those categories)
 let gKeywordSearchCountMap = {
-    'funny': 20, 'cat': 16, 'dog': 20, 'baby': 2, 'politics': 6, 'cute': 5
-    , 'trump': 10, 'obama': 12, 'work': 8, 'science': 4, 'aliens': 7, 'media': 10
-    , 'hope': 4, 'love': 3, 'matrix': 9, 'leonardo': 5, 'animals': 8, 'life': 2
-    , 'putin': 15, 'israel': 4
+    'funny': 20, 'politics': 6, 'cute': 5, 'work': 8
+    , 'science': 4, 'media': 10, 'animals': 8, 'life': 2, 'israel': 4
 }
 
-function drawText(text, x, y, color, fontSize, fontType, maxWidth, textAlign, isBold) {
+// Function to draw text on the canvas
+function drawText(text, x, y, color, fontSize, fontType, maxWidth, textAlign, isBold, xOffset = 0, yOffset = 0) {
+    // Determine font weight based on isBold flag
     let fontWeight = isBold ? 'bold' : 'normal'
-    gCtx.lineWidth = 1
-    gCtx.strokeStyle = color
-    gCtx.fillStyle = color
-    gCtx.font = `${fontWeight} ${fontSize}px ${fontType}`
 
-    if (textAlign === 'left') x = 20
-    else if (textAlign === 'right') x = gElCanvas.width - 12
-    else x = gElCanvas.width / 2 + 4
+    // Set up text stroke and fill styles
+    gCtx.lineWidth = 1
+    gCtx.strokeStyle = 'black'
+    gCtx.fillStyle = color
+
+    // Configure font settings
+    gCtx.font = `${fontWeight} ${fontSize}px ${fontType}`
     gCtx.textAlign = textAlign
 
-    gCtx.textBaseline = 'middle'
+    // Apply offset adjustments
+    x += xOffset
+    y += yOffset
 
+    gCtx.textBaseline = 'middle' // Align text to the middle vertically
+
+    // Split the text by spaces to handle each word
     let words = text.split(' ')
+
+    // Initialize variables
     let line = ''
     let lineHeights = []
 
+    // Loop to arrange words in lines
     for (let n = 0; n < words.length; n++) {
+        // Construct a test line appending the next word
         let testLine = line + words[n] + ' '
+
+        // Measure the text width
         let metrics = gCtx.measureText(testLine)
         let testWidth = metrics.width
 
+        // If the line is too wide, draw it and start a new one
         if (testWidth > maxWidth && n > 0) {
             gCtx.fillText(line, x, y)
             gCtx.strokeText(line, x, y)
@@ -42,6 +55,7 @@ function drawText(text, x, y, color, fontSize, fontType, maxWidth, textAlign, is
         }
         else line = testLine
     }
+    // Draw and stroke any remaining text
     gCtx.fillText(line, x, y)
     gCtx.strokeText(line, x, y)
     lineHeights.push(y)
@@ -49,7 +63,13 @@ function drawText(text, x, y, color, fontSize, fontType, maxWidth, textAlign, is
     return lineHeights
 }
 
-function drawSelectedBorder(x, y, width, height, radius, fillColor) {
+// Function to draw a border around the selected text
+function drawSelectedBorder(x, y, width, height, radius, fillColor, xOffset = 0, yOffset = 0) {
+    // Apply offset adjustments
+    x += xOffset
+    y += yOffset
+
+    // Draw a rounded rectangle, rectangle will be drawn around the line
     gCtx.beginPath()
     gCtx.moveTo(x + radius, y)
     gCtx.lineTo(x + width - radius, y)
@@ -65,28 +85,26 @@ function drawSelectedBorder(x, y, width, height, radius, fillColor) {
     gCtx.fill()
 }
 
+// Function to change font size, font type, color and text alignment of the selected line
 function increaseFontSize() {
     if (gMemeLines[gSelectedLineIdx].fontSize > 50) return
     gMemeLines[gSelectedLineIdx].fontSize += 5
 }
-
 function reduceFontSize() {
     if (gMemeLines[gSelectedLineIdx].fontSize < 20) return
     gMemeLines[gSelectedLineIdx].fontSize -= 5
 }
-
 function changeFont(selectedFont) {
     gMemeLines[gSelectedLineIdx].fontType = selectedFont
 }
-
 function setColor(color) {
     gMemeLines[gSelectedLineIdx].color = color
 }
-
 function changeTextAlign(alignValue) {
     gMemeLines[gSelectedLineIdx].txtAlign = alignValue
 }
 
+// Function to create a line object for a meme
 function createLine(location, txt, lineIdx) {
     return {
         lineIdx,
@@ -94,34 +112,38 @@ function createLine(location, txt, lineIdx) {
         txtAlign: 'center',
         txt,
         location,
-        color: 'black',
+        x: 0,
+        y: 0,
+        color: 'white',
         fontSize: 30,
-        fontType: 'Arial',
+        fontType: 'Impact',
     }
 }
 
+// Function to create image objects with id, url and keywords
 function createImages() {
     const images = []
-    const keywordsArray = [
-        ['funny', 'politics', 'trump'],
-        ['cute', 'animals', 'dog'],
-        ['cute', 'animals', 'dog', 'baby'],
-        ['cute', 'funny', 'cat', 'work'],
-        ['cute', 'funny', 'baby'],
-        ['science', 'funny', 'aliens', 'media'],
-        ['cute', 'funny', 'baby'],
-        ['funny', 'life', 'work', 'media'],
-        ['cute', 'funny', 'baby'],
-        ['politics', 'funny', 'obama'],
-        ['love', 'life', 'hope'],
-        ['funny', 'life', 'work', 'israel'],
-        ['life', 'funny', 'leonardo'],
-        ['funny', 'life', 'matrix', 'media'],
+    const keywordsArray = [ // Assign keywords to the images
+        ['funny', 'politics'],
+        ['cute', 'animals'],
+        ['cute', 'animals'],
+        ['cute', 'funny', 'work'],
+        ['cute', 'funny'],
+        ['science', 'funny', 'media'],
+        ['cute', 'funny'],
+        ['life', 'work', 'media'],
+        ['cute', 'funny'],
+        ['politics', 'funny'],
+        ['funny', 'life'],
+        ['life', 'work', 'israel'],
+        ['life', 'funny', 'media'],
+        ['funny', 'life', 'media'],
         ['media', 'funny', 'life'],
         ['media', 'funny', 'life'],
-        ['politics', 'funny', 'putin'],
+        ['politics', 'funny'],
         ['media', 'funny', 'life'],
     ]
+    // Create image objects and push them into the array
     for (let i = 1; i < 19; i++) {
         const imgObj = {
             id: i,
