@@ -94,6 +94,7 @@ function onChangeTextAlign(alignValue) {
 // Function to toggle the selected line for editing
 function onToggleLine() {
     if (gSelectedLineIdx === null || !gMemeLines[gSelectedLineIdx]) {
+        gIsLineSelected = true
         gSelectedLineIdx = 0
     } else {
         // Code to toggle line selection
