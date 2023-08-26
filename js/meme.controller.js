@@ -4,8 +4,9 @@ let gElCanvas // Canvas element
 let gCtx // Canvas rendering context
 let gCurrentImage = null // Currently selected image URL
 let gIsLineSelected = false // Flag to check if any line is selected
-let gSelectedLineIdx = null // Currently selected line index
+let gSelectedLineIdx = null // Index of currently selected line
 let gIsDragging = false // Flag to check if any line is being dragged
+let gTapTimeout = null // Measurement for unselecting a line on touch
 
 // Initialization function
 function onInit() {
@@ -375,6 +376,8 @@ function onMouseUp() {
 function onTouchStart(event) {
     event.preventDefault()
 
+    clearTimeout(gTapTimeout)
+
     let rect = gElCanvas.getBoundingClientRect()
     let touch = event.touches[0]
     let x = touch.clientX - rect.left
@@ -393,12 +396,12 @@ function onTouchStart(event) {
         let textWidth = gCtx.measureText(line.txt).width
         let startX = (gElCanvas.width - textWidth) / 2
 
-        if (line.txtAlign === 'left') startX = 20;
+        if (line.txtAlign === 'left') startX = 20
         else if (line.txtAlign === 'right') startX = gElCanvas.width - textWidth - 20
 
         if (y > lineY - line.fontSize / 2 && y < lineY + line.fontSize / 2 &&
             x > startX && x < startX + textWidth) {
-            isAnyLineTouched = true // Update the flag
+            isAnyLineTouched = true
             gIsLineSelected = true
             gSelectedLineIdx = idx
             gIsDragging = true
@@ -407,11 +410,14 @@ function onTouchStart(event) {
         }
     })
     // Deselect a line, if touched outside of the line (not on the text)
-    if (!isAnyLineTouched) {
+    if (isAnyLineTouched) {
+        gTapTimeout = setTimeout(() => {
+            gIsDragging = true
+        }, 200)
+    } else {
         gIsLineSelected = false
-        gSelectedLineIdx = null // Set to null or any invalid index
+        gSelectedLineIdx = null
         gIsDragging = false
-
         renderMeme(gCurrentImage)
     }
 }
@@ -419,6 +425,7 @@ function onTouchStart(event) {
 function onTouchMove(event) {
     event.preventDefault()
     if (!gIsDragging || !gIsLineSelected) return
+
     let rect = gElCanvas.getBoundingClientRect()
     let touch = event.touches[0]
     let x = touch.clientX - rect.left
@@ -436,4 +443,5 @@ function onTouchMove(event) {
 function onTouchEnd(event) {
     event.preventDefault()
     gIsDragging = false
+    clearTimeout(gTapTimeout)
 }
