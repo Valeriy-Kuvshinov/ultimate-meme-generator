@@ -21,44 +21,115 @@ function onInit() {
 // Function to render a meme on canvas
 function renderMeme(imageUrl) {
     gCurrentImage = imageUrl
-    const img = new Image() // Create an Image object
-    img.onload = function () { // Once the img has loaded, do the following:
-        // Clear canvas and draw the image
+    const img = new Image()
+
+    img.onload = () => {
         gCtx.clearRect(0, 0, gElCanvas.width, gElCanvas.height)
         gCtx.drawImage(img, 0, 0, gElCanvas.width, gElCanvas.height)
 
-        // Draw each line of the meme
-        gMemeLines.forEach((line, idx) => {
-            let y = (line.location === 'top' ? 50 : line.location === 'middle'
-                ? gElCanvas.height / 2 : gElCanvas.height - 50) + line.y
-            let x = (gElCanvas.width / 2) + line.x
+        gMemeLines.forEach(({
+            txt, color, fontSize, fontType, txtAlign, isBold, location, x: lineX, y: lineY
+        }, idx) => {
+            const y = ((location === 'top' ? 50 : location === 'middle' 
+            ? gElCanvas.height / 2 : gElCanvas.height - 50) + lineY)
+            let x = (gElCanvas.width / 2) + lineX
 
-            // Adjust x position based on text alignment
-            if (line.txtAlign === 'left') x = 20
-            else if (line.txtAlign === 'right') x = gElCanvas.width - 20
+            x = txtAlign === 'left' ? 20 : txtAlign === 'right' ? gElCanvas.width - 20 : x
 
-            const lineHeights = drawText(line.txt, x, y, line.color, line.fontSize, line.fontType
-                , gElCanvas.width - 30, line.txtAlign, line.isBold)
+            drawText(txt, x, y, color, fontSize, fontType, gElCanvas.width - 30
+                , txtAlign, isBold)
 
-            const textWidth = gCtx.measureText(line.txt).width
-            let padding = 10
-
-            // Calculate where the rectangle should start based on text alignment
+            const textWidth = gCtx.measureText(txt).width
+            const padding = 10
             let rectX = x - textWidth / 2 - padding
 
-            if (line.txtAlign === 'left') rectX = x - padding
-            else if (line.txtAlign === 'right') rectX = x - textWidth - padding - 5
+            rectX = txtAlign === 'left' ? x - padding : txtAlign === 'right' 
+            ? x - textWidth - padding - 5 : rectX
+            let rectY = y - fontSize / 2 - padding
 
-            let rectY = y - line.fontSize / 2 - padding
-
-            // Draw the rectangle around the selected line
             if (gIsLineSelected && gSelectedLineIdx === idx) {
-                drawSelectedBorder(rectX, rectY, textWidth + 2 * padding, line.fontSize + 2
-                    * padding, 10, 'rgba(255, 255, 255, 0.3)')
+                drawSelectedBorder(rectX, rectY, textWidth + 2 * padding
+                    , fontSize + 2 * padding, 10, 'rgba(255, 255, 255, 0.3)')
             }
         })
     }
-    img.src = imageUrl // Trigger the image loading
+    img.src = imageUrl
+}
+
+// Function to draw text on the canvas
+function drawText(text, x, y, color, fontSize, fontType, maxWidth, textAlign, isBold, xOffset = 0, yOffset = 0) {
+    // Determine font weight based on isBold flag
+    let fontWeight = isBold ? 'bold' : 'normal'
+
+    // Set up text stroke and fill styles
+    gCtx.lineWidth = 1
+    gCtx.strokeStyle = 'black'
+    gCtx.fillStyle = color
+
+    // Configure font settings
+    gCtx.font = `${fontWeight} ${fontSize}px ${fontType}`
+    gCtx.textAlign = textAlign
+
+    // Apply offset adjustments
+    x += xOffset
+    y += yOffset
+
+    gCtx.textBaseline = 'middle' // Align text to the middle vertically
+
+    // Split the text by spaces to handle each word
+    let words = text.split(' ')
+
+    // Initialize variables
+    let line = ''
+    let lineHeights = []
+
+    // Loop to arrange words in lines
+    for (let n = 0; n < words.length; n++) {
+        // Construct a test line appending the next word
+        let testLine = line + words[n] + ' '
+
+        // Measure the text width
+        let metrics = gCtx.measureText(testLine)
+        let testWidth = metrics.width
+
+        // If the line is too wide, draw it and start a new one
+        if (testWidth > maxWidth && n > 0) {
+            gCtx.fillText(line, x, y)
+            gCtx.strokeText(line, x, y)
+            lineHeights.push(y)
+            line = words[n] + ' '
+            y += fontSize
+        }
+        else line = testLine
+    }
+    // Draw and stroke any remaining text
+    gCtx.fillText(line, x, y)
+    gCtx.strokeText(line, x, y)
+    lineHeights.push(y)
+
+    return lineHeights
+}
+
+// Function to draw a border around the selected text
+function drawSelectedBorder(x, y, width, height, radius, fillColor, xOffset = 0, yOffset = 0) {
+    // Apply offset adjustments
+    x += xOffset
+    y += yOffset
+
+    // Draw a rounded rectangle, rectangle will be drawn around the line
+    gCtx.beginPath()
+    gCtx.moveTo(x + radius, y)
+    gCtx.lineTo(x + width - radius, y)
+    gCtx.arcTo(x + width, y, x + width, y + radius, radius)
+    gCtx.lineTo(x + width, y + height - radius)
+    gCtx.arcTo(x + width, y + height, x + width - radius, y + height, radius)
+    gCtx.lineTo(x + radius, y + height)
+    gCtx.arcTo(x, y + height, x, y + height - radius, radius)
+    gCtx.lineTo(x, y + radius)
+    gCtx.arcTo(x, y, x + radius, y, radius)
+    gCtx.closePath()
+    gCtx.fillStyle = fillColor
+    gCtx.fill()
 }
 
 // Clear the canvas
@@ -242,41 +313,6 @@ function onChooseRandom() {
     renderMeme(randomImageUrl)
 }
 
-// Function to attach event listeners
-function addEventListeners() {
-    // File upload event
-    document.getElementById('file-upload').addEventListener('change', function (e) {
-        onImgUpload(e)
-    })
-
-    // Click event on canvas to select a text line
-    gElCanvas.addEventListener('click', onClickText)
-
-    // Mouse events for when the user drags a line
-    gElCanvas.addEventListener('mousedown', onMouseDown)
-    gElCanvas.addEventListener('mousemove', onMouseMove)
-    gElCanvas.addEventListener('mouseup', onMouseUp)
-
-    // Touch events for when the user drags a line
-    gElCanvas.addEventListener('touchstart', onTouchStart)
-    gElCanvas.addEventListener('touchmove', onTouchMove)
-    gElCanvas.addEventListener('touchend', onTouchEnd)
-
-    // Keyboard event for arrow keys
-    window.addEventListener('keydown', function (event) {
-        // If an arrow key is pressed, call the appropriate function
-        if (event.key === 'ArrowLeft' || event.key.toLowerCase() === 'a') {
-            onMoveLeft()
-        } else if (event.key === 'ArrowRight' || event.key.toLowerCase() === 'd') {
-            onMoveRight()
-        } else if (event.key === 'ArrowUp' || event.key.toLowerCase() === 'w') {
-            onMoveUp()
-        } else if (event.key === 'ArrowDown' || event.key.toLowerCase() === 's') {
-            onMoveDown()
-        }
-    })
-}
-
 function onShareToFacebook() {
     const imgDataUrl = gElCanvas.toDataURL('image/jpeg')
 
@@ -310,138 +346,4 @@ function doUploadImg(imgDataUrl, onSuccess) {
     }
     XHR.open('POST', '//ca-upload.com/here/upload.php')
     XHR.send(formData)
-}
-
-// Function to check if a text line is clicked on the canvas
-function onClickText(event) {
-    let rect = gElCanvas.getBoundingClientRect()
-    let x = event.clientX - rect.left
-    let y = event.clientY - rect.top
-
-    gIsLineSelected = false
-
-    // Logic to detect which line was clicked on
-    gMemeLines.forEach((line, idx) => {
-        gCtx.font = `${line.fontSize}px ${line.fontType}`
-        gCtx.textAlign = line.txtAlign
-
-        let lineY = line.location === 'top' ? 50 : line.location === 'middle' ?
-            gElCanvas.height / 2 : gElCanvas.height - 50
-
-        let textWidth = gCtx.measureText(line.txt).width
-        let startX = (gElCanvas.width - textWidth) / 2
-
-        if (line.txtAlign === 'left') startX = 20
-        else if (line.txtAlign === 'right') startX = gElCanvas.width - textWidth - 20
-
-        if (y > lineY - line.fontSize / 2 && y < lineY + line.fontSize / 2 &&
-            x > startX && x < startX + textWidth) {
-            gIsLineSelected = true
-            gSelectedLineIdx = idx
-            renderMeme(gCurrentImage)
-        }
-    })
-    // Deselect a line, if clicked outside of the line (not on the text)
-    if (!gIsLineSelected) {
-        gSelectedLineIdx = null // Set to null or any invalid index
-        renderMeme(gCurrentImage)
-    }
-}
-
-function onMouseDown() {
-    if (gIsLineSelected) { // Check if any line is selected
-        gIsDragging = true
-    }
-}
-
-function onMouseMove(event) {
-    if (!gIsDragging || !gIsLineSelected) return
-    let rect = gElCanvas.getBoundingClientRect()
-    let x = event.clientX - rect.left
-    let y = event.clientY - rect.top
-
-    // Update the x and y coordinates of the selected line
-    gMemeLines[gSelectedLineIdx].x = x - gElCanvas.width / 2
-    gMemeLines[gSelectedLineIdx].y = y - (gMemeLines[gSelectedLineIdx].location === 'top'
-        ? 50 : gMemeLines[gSelectedLineIdx].location === 'middle'
-            ? gElCanvas.height / 2 : gElCanvas.height - 50)
-
-    renderMeme(gCurrentImage)
-}
-
-function onMouseUp() {
-    gIsDragging = false
-}
-
-function onTouchStart(event) {
-    event.preventDefault()
-
-    clearTimeout(gTapTimeout)
-
-    let rect = gElCanvas.getBoundingClientRect()
-    let touch = event.touches[0]
-    let x = touch.clientX - rect.left
-    let y = touch.clientY - rect.top
-
-    let isAnyLineTouched = false // Flag to track if any line was touched
-
-    // Logic to detect which line was touched
-    gMemeLines.forEach((line, idx) => {
-        gCtx.font = `${line.fontSize}px ${line.fontType}`
-        gCtx.textAlign = line.txtAlign
-
-        let lineY = (line.location === 'top' ? 50 : line.location === 'middle'
-            ? gElCanvas.height / 2 : gElCanvas.height - 50) + line.y
-
-        let textWidth = gCtx.measureText(line.txt).width
-        let startX = (gElCanvas.width - textWidth) / 2
-
-        if (line.txtAlign === 'left') startX = 20
-        else if (line.txtAlign === 'right') startX = gElCanvas.width - textWidth - 20
-
-        if (y > lineY - line.fontSize / 2 && y < lineY + line.fontSize / 2 &&
-            x > startX && x < startX + textWidth) {
-            isAnyLineTouched = true
-            gIsLineSelected = true
-            gSelectedLineIdx = idx
-            gIsDragging = true
-
-            renderMeme(gCurrentImage)
-        }
-    })
-    // Deselect a line, if touched outside of the line (not on the text)
-    if (isAnyLineTouched) {
-        gTapTimeout = setTimeout(() => {
-            gIsDragging = true
-        }, 200)
-    } else {
-        gIsLineSelected = false
-        gSelectedLineIdx = null
-        gIsDragging = false
-        renderMeme(gCurrentImage)
-    }
-}
-
-function onTouchMove(event) {
-    event.preventDefault()
-    if (!gIsDragging || !gIsLineSelected) return
-
-    let rect = gElCanvas.getBoundingClientRect()
-    let touch = event.touches[0]
-    let x = touch.clientX - rect.left
-    let y = touch.clientY - rect.top
-
-    // Update the x and y coordinates of the selected line
-    gMemeLines[gSelectedLineIdx].x = x - gElCanvas.width / 2
-    gMemeLines[gSelectedLineIdx].y = y - (gMemeLines[gSelectedLineIdx].location === 'top'
-        ? 50 : gMemeLines[gSelectedLineIdx].location === 'middle'
-            ? gElCanvas.height / 2 : gElCanvas.height - 50)
-
-    renderMeme(gCurrentImage)
-}
-
-function onTouchEnd(event) {
-    event.preventDefault()
-    gIsDragging = false
-    clearTimeout(gTapTimeout)
 }

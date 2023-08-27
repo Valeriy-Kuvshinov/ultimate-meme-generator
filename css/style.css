@@ -1,2 +1,11 @@
+/* General page info */
 @import url('main.css');
+
+/* Meme editor info */
+@import url('container-style.css');
+
+/* Gallery info */
+@import url('gallery.style.css');
+
+/* Responsive layout info */
 @import url('mq.css');

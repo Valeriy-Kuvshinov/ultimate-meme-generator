@@ -12,11 +12,17 @@
 
 <body onload="onInit()">
     <header>
-        <h1>Ultimate Meme Generator</h1>
+        <div class="logo">Ultimate MemeGen</div>
+        <select class="language-select">
+            <option value="en">EN 🇬🇧 </option>
+            <option value="he">HE 🇮🇱 </option>
+        </select>
     </header>
 
+    <input type="checkbox" id="hide-toggle" class="hide-toggle">
     <article class="heads-up">
-        <h2>Before we begin....</h2>
+        <h2>Hello! Before we begin...</h2>
+        <h3>Here's what the editor can do:</h3>
         <h4>You can add middle line or remove a line from the meme</h4>
         <h4>The up-down arrow toggles between lines</h4>
         <h4>The trashcan icon clears the canvas entirely</h4>
@@ -30,7 +36,8 @@
         <h4>The Download options saves the meme in a PNG format</h4>
         <h4>You may use an image of your own via the Upload option</h4>
         <h4>You can share your meme on Facebook!</h4>
-        <h4>Have fun!</h4>
+        <h4>If everything is clear, just press the button to start</h4>
+        <label for="hide-toggle" class="got-it-button">Got it, let's begin!</label>
     </article>
 
     <main class="meme-container">
@@ -46,7 +53,7 @@
                 <button onclick="onAddLine()" class="one-col"><i class="fa-regular fa-square-plus"></i></button>
                 <button onclick="onRemoveLine()" class="one-col"><i class="fa-regular fa-square-minus"></i></button>
                 <button onclick="onToggleLine()" class="one-col"><i class="fa-solid fa-arrows-up-down"></i></button>
-                <button onclick="onResetMeme()" class="one-col"><i class="fa-solid fa-trash-can"></i></button>
+                <button onclick="onResetMeme()" class="one-col trashcan"><i class="fa-solid fa-trash-can"></i></button>
 
                 <div class="sub-grid">
                     <select class="two-col" id="font-select" onchange="onChangeFont(this.value)">
@@ -101,6 +108,7 @@
     <script src="js/services/meme.service.js"></script>
     <script src="js/gallery.controller.js"></script>
     <script src="js/meme.controller.js"></script>
+    <script src="js/drag-touch-click.controller.js"></script>
 </body>
 
 </html>
