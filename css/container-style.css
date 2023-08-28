@@ -8,6 +8,7 @@
     width: fit-content;
     padding: 10px;
     border-radius: 10px;
+    direction: ltr;
 }
 
 .meme-edit-options {

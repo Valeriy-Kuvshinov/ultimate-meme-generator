@@ -35,6 +35,7 @@
     margin-top: 1vh;
     width: fit-content;
     margin: auto;
+    direction: ltr;
 }
 
 .gallery-section img {

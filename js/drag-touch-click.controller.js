@@ -34,6 +34,11 @@ function addEventListeners() {
             onMoveDown()
         }
     })
+
+    // Listen for changes to the language selection
+    document.querySelector('.language-select').addEventListener('change', function () {
+        updateUI(this.value)
+    })
 }
 
 // Function to check if a text line is clicked on the canvas
@@ -62,6 +67,8 @@ function onClickText(event) {
             x > startX && x < startX + textWidth) {
             gIsLineSelected = true
             gSelectedLineIdx = idx
+            const textInput = document.querySelector('.text-input').value = ''
+            
             renderMeme(gCurrentImage)
         }
     })
@@ -129,6 +136,7 @@ function onTouchStart(event) {
             gIsLineSelected = true
             gSelectedLineIdx = idx
             gIsDragging = true
+            const textInput = document.querySelector('.text-input').value = ''
 
             renderMeme(gCurrentImage)
         }

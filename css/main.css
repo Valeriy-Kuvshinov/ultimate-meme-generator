@@ -22,6 +22,7 @@ header {
     opacity: 0.8;
     border-bottom: 1px solid rgb(51, 49, 49);
     margin-bottom: 2vh;
+    direction: ltr;
 }
 
 .logo {
@@ -33,6 +34,7 @@ header {
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    direction: ltr;
 }
 
 .language-select {
@@ -43,6 +45,7 @@ header {
     cursor: pointer;
     color: rgb(22, 20, 20);
     box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+    direction: ltr;
 }
 
 .heads-up {

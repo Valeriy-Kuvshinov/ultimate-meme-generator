@@ -15,11 +15,14 @@ function onInit() {
     gCtx = gElCanvas.getContext('2d')
 
     renderGallery(gImgs) // Render initial gallery
+
+    updateUI('en') // Initialize the UI with the default language (English)
+
     addEventListeners() // Attach event listeners to elements
 }
 
 // Function to render a meme on canvas
-function renderMeme(imageUrl) {
+function renderMeme(imageUrl, callback = null) {
     gCurrentImage = imageUrl
     const img = new Image()
 
@@ -30,8 +33,8 @@ function renderMeme(imageUrl) {
         gMemeLines.forEach(({
             txt, color, fontSize, fontType, txtAlign, isBold, location, x: lineX, y: lineY
         }, idx) => {
-            const y = ((location === 'top' ? 50 : location === 'middle' 
-            ? gElCanvas.height / 2 : gElCanvas.height - 50) + lineY)
+            const y = ((location === 'top' ? 50 : location === 'middle'
+                ? gElCanvas.height / 2 : gElCanvas.height - 50) + lineY)
             let x = (gElCanvas.width / 2) + lineX
 
             x = txtAlign === 'left' ? 20 : txtAlign === 'right' ? gElCanvas.width - 20 : x
@@ -43,8 +46,8 @@ function renderMeme(imageUrl) {
             const padding = 10
             let rectX = x - textWidth / 2 - padding
 
-            rectX = txtAlign === 'left' ? x - padding : txtAlign === 'right' 
-            ? x - textWidth - padding - 5 : rectX
+            rectX = txtAlign === 'left' ? x - padding : txtAlign === 'right'
+                ? x - textWidth - padding - 5 : rectX
             let rectY = y - fontSize / 2 - padding
 
             if (gIsLineSelected && gSelectedLineIdx === idx) {
@@ -52,6 +55,9 @@ function renderMeme(imageUrl) {
                     , fontSize + 2 * padding, 10, 'rgba(255, 255, 255, 0.3)')
             }
         })
+        if (callback) {
+            callback()
+        }
     }
     img.src = imageUrl
 }
@@ -185,6 +191,7 @@ function onToggleLine() {
             gSelectedLineIdx = 0
         } else gSelectedLineIdx++
     }
+    const textInput = document.querySelector('.text-input').value = ''
     renderMeme(gCurrentImage)
 }
 
@@ -276,7 +283,6 @@ function onImgUpload(e) {
         return
     }
     let imageURL = URL.createObjectURL(img)
-
     gCurrentImage = imageURL
 
     let imageObj = new Image()
@@ -293,12 +299,14 @@ function onImgUpload(e) {
 // Function to handle downloading a meme to a PNG format
 function downloadMeme(elLink) {
     gIsLineSelected = false
-    renderMeme(gCurrentImage)
+    gSelectedLineIdx = null
 
-    const dataUrl = gElCanvas.toDataURL()
-
-    elLink.href = dataUrl
-    elLink.download = 'my-img' // Set a name for the downloaded file
+    renderMeme(gCurrentImage, () => {
+        // The callback function will execute after renderMeme() is complete
+        const dataUrl = gElCanvas.toDataURL()
+        elLink.href = dataUrl
+        elLink.download = 'my-img' // Set a name for the downloaded file
+    })
 }
 
 // Function to handle event of randomly choosing an img from the gallery
@@ -346,4 +354,29 @@ function doUploadImg(imgDataUrl, onSuccess) {
     }
     XHR.open('POST', '//ca-upload.com/here/upload.php')
     XHR.send(formData)
+}
+
+function updateUI(language) {
+    const langTranslations = translations[language]
+    const translatableElements = document.querySelectorAll('[data-trans]')
+    const textInput = document.querySelector('.text-input')
+
+    if (language === 'he') {
+        document.body.setAttribute('dir', 'rtl')
+        textInput.style.direction = 'rtl'
+        textInput.style.textAlign = 'right'
+    } else {
+        document.body.setAttribute('dir', 'ltr')
+        textInput.style.direction = 'ltr'
+        textInput.style.textAlign = 'left'
+    }
+
+    translatableElements.forEach(element => {
+        const key = element.getAttribute('data-trans')
+        if (langTranslations[key]) {
+            if (element.tagName === 'INPUT' && element.placeholder !== undefined) {
+                element.placeholder = langTranslations[key]
+            } else element.textContent = langTranslations[key]
+        }
+    })
 }

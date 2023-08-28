@@ -21,23 +21,25 @@
 
     <input type="checkbox" id="hide-toggle" class="hide-toggle">
     <article class="heads-up">
-        <h2>Hello! Before we begin...</h2>
-        <h3>Here's what the editor can do:</h3>
-        <h4>You can add middle line or remove a line from the meme</h4>
-        <h4>The up-down arrow toggles between lines</h4>
-        <h4>The trashcan icon clears the canvas entirely</h4>
-        <h2>Editing is done seperately per line</h2>
-        <h4>By default, the top line is selected</h4>
-        <h4>You can change the color, bold status, font size, font type and text alignment of a line</h4>
-        <h4>Changing the text of a line is done by the input field</h4>
-        <h4>To move a line, use the arrow / WASD keys on the keyboard, or just drag it via mouse or touch</h4>
-        <h2>Other options</h2>
-        <h4>Clicking on "I'm Flexible" gives you a random image from the gallery</h4>
-        <h4>The Download options saves the meme in a PNG format</h4>
-        <h4>You may use an image of your own via the Upload option</h4>
-        <h4>You can share your meme on Facebook!</h4>
-        <h4>If everything is clear, just press the button to start</h4>
-        <label for="hide-toggle" class="got-it-button">Got it, let's begin!</label>
+        <h2 data-trans="line1">Hello! Before we begin...</h2>
+        <h3 data-trans="line2">Here's what the editor can do:</h3>
+        <h4 data-trans="line3">You can add middle line or remove a line from the meme</h4>
+        <h4 data-trans="line4">The up-down arrow toggles between lines</h4>
+        <h4 data-trans="line5">The trashcan icon clears the canvas entirely</h4>
+        <h2 data-trans="line6">Editing is done seperately per line</h2>
+        <h4 data-trans="line7">By default, the top line is selected</h4>
+        <h4 data-trans="line8">You can change the color, bold status, font size, font type and text alignment of a line
+        </h4>
+        <h4 data-trans="line9">Changing the text of a line is done by the input field</h4>
+        <h4 data-trans="line10">To move a line, use the arrow / WASD keys on the keyboard, or just drag it via mouse or
+            touch</h4>
+        <h2 data-trans="line11">Other options</h2>
+        <h4 data-trans="line12">Clicking on "I'm Flexible" gives you a random image from the gallery</h4>
+        <h4 data-trans="line13">The Download options saves the meme in a PNG format</h4>
+        <h4 data-trans="line14">You may use your own images via the Upload option</h4>
+        <h4 data-trans="line15">You can share your meme on Facebook!</h4>
+        <h4 data-trans="line16">If everything is clear, just press the button to start</h4>
+        <label data-trans="btn1" for="hide-toggle" class="got-it-button">Got it, let's begin!</label>
     </article>
 
     <main class="meme-container">
@@ -48,7 +50,7 @@
         <section class="meme-edit-options">
             <div class="main-grid">
                 <div class="meme-edit-options-title">
-                    <h2>Meme Editing Options</h2>
+                    <h2 data-trans="title1">Meme Editing Options</h2>
                 </div>
                 <button onclick="onAddLine()" class="one-col"><i class="fa-regular fa-square-plus"></i></button>
                 <button onclick="onRemoveLine()" class="one-col"><i class="fa-regular fa-square-minus"></i></button>
@@ -75,28 +77,30 @@
                 </div>
 
                 <input type="text" id="userText" name="userText" oninput="setLineTxt()" class="text-input"
-                    placeholder="insert text per line (after selecting)">
-                <button onclick="onChooseRandom()" class="two-col flexible-btn">I'm Flexible</button>
+                    data-trans="textPlaceholder" placeholder="insert text per line (after selecting)">
+                <button onclick="onChooseRandom()" data-trans="btn2" class="two-col flexible-btn">I'm Flexible</button>
                 <label for="file-upload" class="two-col custom-file-upload">
-                    Upload <i class="fa-solid fa-image"></i>
+                    <span data-trans="btn3">Upload</span> <i class="fa-solid fa-image"></i>
                 </label>
                 <input id="file-upload" type="file" style="display:none;" onchange="onImgUpload(event)" />
 
                 <div class="two-col download-link-area">
-                    <a href="#" class="download-link" onclick="downloadMeme(this)" download="my-img.jpg">Download <i
-                            class="fa-solid fa-arrow-down"></i></a>
+                    <a href="#" class="download-link" onclick="downloadMeme(this)" download="my-img.jpg">
+                        <span data-trans="btn4">Download</span> <i class="fa-solid fa-arrow-down"></i>
+                    </a>
                 </div>
-                <button onclick="onShareToFacebook()" class="two-col share-btn">Share to <i
-                        class="fa-brands fa-square-facebook"></i></button>
+                <button onclick="onShareToFacebook()" class="two-col share-btn">
+                    <span data-trans="btn5">Share to</span> <i class="fa-brands fa-square-facebook"></i>
+                </button>
             </div>
         </section>
     </main>
 
     <div class="gallery-section-wrapper">
-        <h2>IMAGE GALLERY</h2>
+        <h2 data-trans="title2">IMAGE GALLERY</h2>
         <input type="text" id="image-search"
             placeholder="Search by Funny, Politics, Cute, Life, Media, Work, Animals, Israel, Science"
-            oninput="filterGallery()" />
+            data-trans="searchPlaceholder" oninput="filterGallery()" />
         <section class="gallery-section"></section>
     </div>
 
@@ -105,6 +109,7 @@
     </footer>
 
     <script src="js/services/util.service.js"></script>
+    <script src="js/services/i18n.service.js"></script>
     <script src="js/services/meme.service.js"></script>
     <script src="js/gallery.controller.js"></script>
     <script src="js/meme.controller.js"></script>
